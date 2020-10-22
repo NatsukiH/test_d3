@@ -7,7 +7,27 @@
   </head>
   <body>
     <script>
-      d3.select("body").append("p").text("Hello!");
+    //   d3.select("body").append("p").text("Hello!");
+      var dataset = [ 1, 2, 3, 4, 5 ];
+    //   ”body”内の”p”要素を検索して渡す
+    // まだ存在しないので空の選択を次のメソッドに渡す
+      d3.select("body").selectAll("p")
+        //   データ数をカウントして解析する
+        .data(dataset)
+        // データがバインドされた新しい要素を作成するためにはenter()を使う必要がある
+        .enter()
+        // enter()によって作成された仮の参照場所を受け取り、”p”要素をページに挿入
+        .append("p")
+        // 新しく作成されたpへの参照を取得し、テキスト値を挿入
+        .text(function(d) { return "この値は" + d + "です。"; })
+        
+        .style("color",function(d){
+            if (d > 2){
+                return "pink";
+            }else{
+                return "blue";
+            }
+        });
     </script>
   </body>
 </html>
