@@ -1,34 +1,48 @@
 var dataset = [
-  { "name": "A", "para1": 0, "para2": 5 },
-  { "name": "B", "para1": 1, "para2": 6 },
-  { "name": "C", "para1": 2, "para2": 7 },
-  { "name": "D", "para1": 3, "para2": 8 },
-  { "name": "E", "para1": 4, "para2": 9 }
-]
-
-// 1行目のkeyだけを取り出す
-var names = d3.keys(dataset[0]);
-
-var table = d3.select("body")
-  .append("table")
-  .attr("border", "1") // 枠線表示;
-
-table.append("thead")
-  .append("tr")
-  .selectAll("th")
-  .data(names)
-  .enter()
-  .append("th")
-  .text(function(d) { return d; });
-
-table.append("tbody")
-  .selectAll("tr")
-  .data(dataset)
-  .enter()
-  .append("tr")
-  .selectAll("td")
-  // オブジェクトのキーを配列として取り出してくる
-  .data(function(row) { return d3.entries(row); })
-  .enter()
-  .append("td")
-  .text(function(d) { return d.value; });
+    [5, 20],
+    [480, 90],
+    [250, 50],
+    [100, 33],
+    [330, 95],
+    [410, 12],
+    [475, 44],
+    [25, 67],
+    [85, 21],
+    [220, 88]
+  ];
+  var width = 400;
+  var height = 300;
+ 
+  var svg = d3.select("body").append("svg").attr("width", width).attr("height", height);
+  var padding = 30;
+ 
+  var xScale = d3.scaleLinear()
+    .domain([0, d3.max(dataset, function(d){return d[0];})])
+    .range([padding, width - padding]);
+ 
+  var yScale = d3.scaleLinear()
+    .domain([0, d3.max(dataset, function(d){return d[1];})])
+    .range([height - padding, padding]);
+ 
+  var axisx = d3.axisBottom(xScale);
+  var axisy = d3.axisLeft(yScale);
+  svg.append("g")
+    .attr("transform", "translate(" + 0 + "," + (height - padding) + ")")
+    .call(axisx);
+ 
+  svg.append("g")
+    .attr("transform", "translate(" + padding + "," + 0 + ")")
+    .call(axisy);
+ 
+  svg.append("g")
+    .selectAll("circle")
+   .data(dataset)
+   .enter()
+   .append("circle").attr("cx", function(d) {
+        return xScale(d[0]);
+   })
+   .attr("cy", function(d) {
+        return yScale(d[1]);
+   })
+   .attr("fill", "SkyBlue")
+   .attr("r", 4);
